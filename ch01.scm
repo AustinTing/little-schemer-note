@@ -17,3 +17,9 @@
 ; The Law of Cons
 (null? '()) ; #t
 (null? 'e) ; #f No answer. Because you cannot ask null? of an atom. In practice, (null? a) is false for everything, except the empty list.
+;  The Law of Null?
+(eq? 'Harry 'Harry) ; t
+(eq? '() '()) ; t Why no answer??
+(eq? 7 7) ; t Why no answer??
+
+
