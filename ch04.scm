@@ -105,5 +105,12 @@
 
 (divided 15 4)
 
-     
+
+(define my-length
+  (lambda (lat)
+    (cond
+     ((null? lat) 0)
+     (else (add1 (my-length (cdr lat)))))))
+
+(my-length '(1 2 3))
 
