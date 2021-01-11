@@ -7,7 +7,7 @@
     (cond
      ((null? l) #t)
      ((atom? (car l)) (lat? (cdr l)))
-     (else #f)))) ; A list can be empty, can have an atom in the first position, or can have a listin the first position.
+     (else #f)))) ; A list can be empty, can have an atom in the first position, or can have a list in the first position.
 
 (define member?
   (lambda (a lat)
