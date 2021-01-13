@@ -1,6 +1,11 @@
-(define atom?
+(load "ch04.scm"
   (lambda (x)
-    (and (not (pair? x)) (not (null? x)))))
+    (pretty-print
+      (if (annotation? x)
+          (annotation-stripped x)
+          x))
+    (newline)
+    (eval x)))
 
 (define rember*
   (lambda (a l)
@@ -14,12 +19,6 @@
 (rember* 'cup '((coffee) cup ((tea) cup) (and (hick))))
 
 ; A list can be empty, can have an atom in the first position, or can have a list in the first position.
-(define lat?
-  (lambda (l)
-    (cond
-     ((null? l) #t)
-     ((atom? (car l)) (lat? (cdr l)))
-     (else #f))))
 
 (define insertR*
   (lambda (new old l)
@@ -36,17 +35,6 @@
 			  (((chuck)))
 			  (if (a) ((wood chuck)))
 			  could chuck wood))
-
-(define add1
-  (lambda (n)
-    (+ 1 n)))
-
-(define jia ;; +
-  (lambda (n m)
-    (cond
-     ((zero? m) n)
-     (else (add1 (jia n (sub1 m)))))))
-
 
 (define occur*
   (lambda (a l)
@@ -82,4 +70,58 @@
 			  (bread)
 			  (banana brandy)))
 
-		
+(define insertL*
+  (lambda (new old l)
+    (cond
+     ((null? l) '())
+     ((atom? (car l)) (cond
+		       ((eq? old (car l)) (cons new (cons old (insertL* new old (cdr l)))))
+		       (else (cons (car l) (insertL* new old (cdr l))))))
+     (else (cons (insertL* new old (car l)) (insertL* new old (cdr l)))))))
+
+(insertL* 'peaker 'chuck '((how much (wood))
+			  could
+			  ((a (wood) chuck))
+			  (((chuck)))
+			  (if (a) ((wood chuck)))
+			  could chuck wood))
+(define member*
+  (lambda (a l)
+    (cond
+     ((null? l) #f)
+     ((atom? (car l)) (or (eq? a (car l))
+			  (member* a (cdr l))))
+     (else (or (member* a (car l))
+	       (member* a (cdr l)))))))
+(member* 'chips '((potato) (chips ((with) fish) (chips))))
+
+(define leftmost
+  (lambda (l)
+    (cond
+     ((atom? (car l)) (car l))
+     (else (leftmost (car l))))))
+
+(leftmost '((potato) (chips ((with) fish) (chips))))
+(leftmost '(((hot) (tuna (and))) cheese))
+
+(define eqlist?
+  (lambda (l1 l2)
+    (cond
+     ((and (null? l1) (null? l2)) #t)
+     ((and (atom? (car l1)) (atom? (car l2))) (and
+					       (eqan? (car l1) (car l2))
+					       (eqlist? (cdr l1) (cdr l2))))
+     ((and (list? (car l1)) (list? (car l2))) (and
+					       (eqlist? (car l1) (car l2))
+					       (eqlist? (cdr l1) (cdr l2))))
+     (else #f))))
+
+(eqlist? '(a b c) '(a b c))
+(eqlist? '(a b c) '(a b b))
+(eqlist? '(a ((b))) '(a ((b))))
+(eqlist? '(a ((b))) '(a ((c))))
+(eqlist? '(a ((b)) (c (d))) '(a ((b)) (c (d))))
+(eqlist? '(a ((b)) (c (d))) '(a ((d)) (c (d))))
+
+ 
+					       
