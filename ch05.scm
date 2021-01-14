@@ -104,6 +104,8 @@
 (leftmost '((potato) (chips ((with) fish) (chips))))
 (leftmost '(((hot) (tuna (and))) cheese))
 
+
+;; Check it
 (define eqlist?
   (lambda (l1 l2)
     (cond
@@ -123,5 +125,12 @@
 (eqlist? '(a ((b)) (c (d))) '(a ((b)) (c (d))))
 (eqlist? '(a ((b)) (c (d))) '(a ((d)) (c (d))))
 
- 
-					       
+;; An S-expression is either an atom or a(possibly empty) list of S-expressions.
+
+;; Fix it
+(define my-equal?
+  (lambda (s1 s2)
+    (cond
+     ((and (null? s1) (null? s2)) #t)
+     ((and (atom? s1) (atom? s2)) (eq? s1 s2))
+     ((else (and (my-equal? (car s1) (car s2)) (my-equal? (cdr s1) (cdr s2))))))))
