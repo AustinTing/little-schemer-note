@@ -85,7 +85,6 @@
 
 (num-eq? 2 5)
 (num-eq? 5 2)
-(my-eq? 5 5)
 
 (define up
   (lambda (n m)
