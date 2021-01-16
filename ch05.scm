@@ -104,18 +104,26 @@
 (leftmost '((potato) (chips ((with) fish) (chips))))
 (leftmost '(((hot) (tuna (and))) cheese))
 
-
-;; Check it
 (define eqlist?
   (lambda (l1 l2)
     (cond
      ((and (null? l1) (null? l2)) #t)
-     ((and (atom? (car l1)) (atom? (car l2))) (and
-					       (eqan? (car l1) (car l2))
-					       (eqlist? (cdr l1) (cdr l2))))
-     ((and (list? (car l1)) (list? (car l2))) (and
-					       (eqlist? (car l1) (car l2))
-					       (eqlist? (cdr l1) (cdr l2))))
+     ((or (null? l1) (null? l2)) #f)
+     ((and (atom? (car l1)) (atom? (car l2))) (and (eqan? (car l1) (car l2))
+						   (eqlist? (cdr l1) (cdr l2))))
+     ((or (atom? (car l1)) (atom? (car l2))) #f)
+     (else (and (eqlist? (car l1) (car l2))
+		(eqlist? (cdr l1) (cdr l2)))))))
+
+
+(define my-eqlist?
+  (lambda (l1 l2)
+    (cond
+     ((and (null? l1) (null? l2)) #t)
+     ((and (atom? (car l1)) (atom? (car l2))) (and (eqan? (car l1) (car l2))
+						   (eqlist? (cdr l1) (cdr l2))))
+     ((and (list? (car l1)) (list? (car l2))) (and (eqlist? (car l1) (car l2)) ;; List? is not be defined before.
+						   (eqlist? (cdr l1) (cdr l2))))
      (else #f))))
 
 (eqlist? '(a b c) '(a b c))
