@@ -141,3 +141,11 @@
      ((and (atom? s1) (atom? s2)) (eqan? s1 s2))
      ((or (atom? s1) (atom? s2)) #f)
      ((else (eqlist? s1 s2))))))
+
+(define rember
+  (lambda (s l)
+    (cond
+     ((null? l) '())
+     ((equal? s (car l) ) (rember s (cdr l)))
+     (else (cons (car l) (rember s (cdr l)))))))
+
