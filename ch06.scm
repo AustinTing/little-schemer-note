@@ -106,14 +106,14 @@
   (lambda (nexp)
     (cond 
      ((atom? nexp) nexp)
-     ((eq? (car (cdr nexp)) (quote +)) (jia (value (car nexp))
-					    (value (car (cdr (cdr nexp))))))
-     ((eq? (car (cdr nexp)) (quote x)) (cheng (value (car nexp))
-					      (value (car (cdr (cdr nexp))))))
-     (else (up (value (car nexp))
+     ((eq? (car nexp) (quote +)) (jia (value (car (cdr nexp)))
+				      (value (car (cdr (cdr nexp))))))
+     ((eq? (car nexp) (quote x)) (cheng (value (car (cdr nexp)))
+					(value (car (cdr (cdr nexp))))))
+     (else (up (value (car (cdr nexp)))
 	       (value (car (cdr (cdr nexp)))))))))
 
 (up 2 3)
 
-(value '(1 + 1 + 1))
+(value '(+ 1 (x 2 3)))
 
