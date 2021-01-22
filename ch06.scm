@@ -101,3 +101,19 @@
 
 (numbered? '(1 x 1))
 (numbered? '(1 x p))
+
+(define value
+  (lambda (nexp)
+    (cond 
+     ((atom? nexp) nexp)
+     ((eq? (car (cdr nexp)) (quote +)) (jia (value (car nexp))
+					    (value (car (cdr (cdr nexp))))))
+     ((eq? (car (cdr nexp)) (quote x)) (cheng (value (car nexp))
+					      (value (car (cdr (cdr nexp))))))
+     (else (up (value (car nexp))
+	       (value (car (cdr (cdr nexp)))))))))
+
+(up 2 3)
+
+(value '(1 + 1 + 1))
+
