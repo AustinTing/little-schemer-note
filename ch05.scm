@@ -140,7 +140,7 @@
     (cond
      ((and (atom? s1) (atom? s2)) (eqan? s1 s2))
      ((or (atom? s1) (atom? s2)) #f)
-     ((else (eqlist? s1 s2))))))
+     (else (eqlist? s1 s2)))))
 
 (eqlist? '(a b c) '(a b c))
 (eqlist? '(a b c) '(a b b))
@@ -148,7 +148,6 @@
 (eqlist? '(a ((b))) '(a ((c))))
 (eqlist? '(a ((b)) (c (d))) '(a ((b)) (c (d))))
 (eqlist? '(a ((b)) (c (d))) '(a ((d)) (c (d))))
-
 
 (define rember
   (lambda (s l)
