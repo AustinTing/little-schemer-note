@@ -27,3 +27,15 @@
 (set? '(a a))
 (set? '(a b c d))
 (set? '(a b c c))
+
+(define makeset
+  (lambda (lat)
+    (cond
+     ((null? lat) '())
+     ((member? (car lat) (cdr lat)) (makeset (cdr lat)))
+     (else (cons (car lat)
+		 (makeset (cdr lat)))))))
+
+(makeset '(a a))
+(makeset '(a b c d))
+(makeset '(a b c c))
