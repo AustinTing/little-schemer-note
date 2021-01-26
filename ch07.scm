@@ -7,6 +7,24 @@
     (newline)
     (eval x)))
 
+(load "ch02.scm"
+  (lambda (x)
+    (pretty-print
+      (if (annotation? x)
+          (annotation-stripped x)
+          x))
+    (newline)
+    (eval x)))
+
+(load "ch03.scm"
+  (lambda (x)
+    (pretty-print
+      (if (annotation? x)
+          (annotation-stripped x)
+          x))
+    (newline)
+    (eval x)))
+
 
 (load "ch06.scm"
   (lambda (x)
@@ -39,3 +57,12 @@
 (makeset '(a a))
 (makeset '(a b c d))
 (makeset '(a b c c))
+
+(define makeset
+  (lambda (lat)
+    (cond
+     ((null? lat) '())
+     (else (cons (car lat)
+		 (makeset (multirember (car lat) (cdr lat))))))))
+
+
