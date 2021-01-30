@@ -7,15 +7,6 @@
     (newline)
     (eval x)))
 
-(load "ch02.scm"
-  (lambda (x)
-    (pretty-print
-      (if (annotation? x)
-          (annotation-stripped x)
-          x))
-    (newline)
-    (eval x)))
-
 (load "ch03.scm"
   (lambda (x)
     (pretty-print
@@ -73,8 +64,20 @@
 	    ((member? (car set1) set2) (subset? (cdr set1) set2))
 	    (else #f))))))
 
+(member? 'a '(a b))
+
 (define subset?
   (lambda (set1 set2)
     (cond
      ((null? set1) #t)
-     (else (and (member? (car set1) set2)) (subset? (cdr set1) set2)))))
+     (else (and (member? (car set1) set2) (subset? (cdr set1) set2))))))
+
+(subset? '(a b) '(a c d))
+(subset? '(a b) '(c b a))
+
+(define eqset?
+  (lambda (set1 set2)
+    (and (subset? set1 set2) (subset? set2 set1))))
+
+(eqset? '(a b c) '(c b a))
+(eqset? '(a b c) '(c d a))
