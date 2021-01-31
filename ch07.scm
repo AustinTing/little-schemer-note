@@ -81,3 +81,13 @@
 
 (eqset? '(a b c) '(c b a))
 (eqset? '(a b c) '(c d a))
+
+(define intersect?
+  (lambda (set1 set2)
+    (cond
+     ((null? set1) #f)
+     ((member? (car set1) set2) #t)
+     (else (intersect? (cdr set1) set2)))))
+
+(intersect? '(a b c) '(c d f))
+(intersect? '(a b c) '(e f g))
