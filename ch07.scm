@@ -162,13 +162,20 @@
 (fun? '((a a) (b b) (c c)))
 (fun? '((a a) (b b) (a c)))
 
+(define revpair
+  (lambda (p)
+    (build (second p) (first p))))
+
+(revpair '(a b))
+
 (define revrel
   (lambda (rel)
     (cond
      ((null? rel) '())
-     (else (cons (build (second (car rel))
-			(first (car rel)))
+     (else (cons (revpair (car rel))
 		 (revrel (cdr rel)))))))
 
 (revrel '((a b) (c d) (e f)))
+
+
 			
