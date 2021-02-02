@@ -177,5 +177,25 @@
 
 (revrel '((a b) (c d) (e f)))
 
+(define seconds
+  (lambda (rel)
+    (cond
+     ((null? rel) '())
+     (else (cons (second (car rel))
+		 (seconds (cdr rel)))))))
 
-			
+(seconds '((a b) (c d) (e f)))
+
+(define fullfun?
+  (lambda (fun)
+    (set? (seconds fun))))
+
+(fullfun? '((a b) (c d) (e f)))
+(fullfun? '((a b) (c d) (e b)))
+
+(define one-to-one?
+  (lambda (fun)
+    (fun? (revrel fun))))
+
+(one-to-one? '((a b) (c d) (e f)))
+(one-to-one? '((a b) (c d) (e b)))
