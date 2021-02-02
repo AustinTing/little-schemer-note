@@ -134,9 +134,41 @@
 (a-pair? '(a 1))
 (a-pair? '((a) b))
 
+(define first
+  (lambda (p)
+    (cond
+     (else (car p)))))
+
+(first '(a b))
+
+(define second
+  (lambda (p)
+    (cond
+     (else (car (cdr p))))))
+
+(second '(a b))
+
+(define build
+  (lambda (s1 s2)
+    (cond
+     (else (cons s1 (cons s2 '()))))))
+
+(build 'a 'b)
+
 (define fun?
   (lambda (rel)
     (set? (firsts rel))))
 
 (fun? '((a a) (b b) (c c)))
 (fun? '((a a) (b b) (a c)))
+
+(define revrel
+  (lambda (rel)
+    (cond
+     ((null? rel) '())
+     (else (cons (build (second (car rel))
+			(first (car rel)))
+		 (revrel (cdr rel)))))))
+
+(revrel '((a b) (c d) (e f)))
+			
