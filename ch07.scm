@@ -122,4 +122,21 @@
 
 (intersectall '((a b c) (b c d) (c d e) (f g c)))
 
-		  
+(define a-pair?
+  (lambda (x)
+    (cond
+     ((atom? x) #f)
+     ((null? x) #f)
+     ((null? (cdr x)) #f) ; False if just only one.
+     ((null? (cdr (cdr x))) #t) ; True if there is just two s.
+     (else #f))))
+
+(a-pair? '(a 1))
+(a-pair? '((a) b))
+
+(define fun?
+  (lambda (rel)
+    (set? (firsts rel))))
+
+(fun? '((a a) (b b) (c c)))
+(fun? '((a a) (b b) (a c)))
