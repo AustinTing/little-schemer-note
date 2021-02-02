@@ -104,5 +104,16 @@
 (intersect '(a b c) '(c d f))
 (intersect '(a b c) '(e f g))
 
+(define union
+  (lambda (set1 set2)
+    (cond
+     ((null? set1) set2)
+     ((member? (car set1) set2) (union (cdr set1) set2))
+     (else (cons (car set1) (union (cdr set1) set2))))))
+
+(union '(a b c) '(c d f))
+(union '(a b c) '(e f g a b c))
+
+
 
 		  
