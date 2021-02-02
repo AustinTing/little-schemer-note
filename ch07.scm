@@ -114,6 +114,12 @@
 (union '(a b c) '(c d f))
 (union '(a b c) '(e f g a b c))
 
+(define intersectall
+  (lambda (l-set)
+    (cond
+     ((null? (cdr l-set)) (car l-set))
+     (else (intersect (car l-set) (intersectall (cdr l-set)))))))
 
+(intersectall '((a b c) (b c d) (c d e) (f g c)))
 
 		  
