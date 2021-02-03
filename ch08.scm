@@ -29,10 +29,19 @@
     (lambda (new old l)
       (cond
        ((null? l) '())
-       ((test? old (car l)) (cons new l))
+       ((test? old (car l)) (cons new (cons old (cdr l))))
        (else (cons (car l) ((insertL-f test?) new old (cdr l))))))))
 
 ((insertL-f equal?) 'L 'b '(a b c d))
 
+(define insertR-f
+  (lambda (test?)
+    (lambda (new old l)
+      (cond
+       ((null? l) '())
+       ((test? old (car l))  (cons old (cons new (cdr l))))
+       (else (cons (car l) ((insertR-f test?) new old (cdr l))))))))
+
+((insertR-f equal?) 'R 'b '(a b c d))
 
 
