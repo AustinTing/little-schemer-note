@@ -44,4 +44,35 @@
 
 ((insertR-f equal?) 'R 'b '(a b c d))
 
+(define seqL
+  (lambda (new old l)
+    (cons new (cons old l))))
 
+(seqL 'L 'a '(b c))
+
+(define seqR
+  (lambda (new old l)
+    (cons old (cons new l))))
+
+(seqR 'R 'a '(b c))
+
+(define insert-g
+ (lambda (seq)
+   (lambda (new old l)
+     (cond
+      ((null? l) '())
+      ((equal? old (car l)) (seq new old (cdr l)))
+      (else (cons (car l) ((insert-g seq) new old (cdr l))))))))
+
+((insert-g seqL) 'L 'b '(a b c))
+((insert-g seqR) 'R 'b '(a b c))
+
+(define seqrem
+  (lambda (new old l)
+    l))
+
+(define yyy
+  (lambda (a l)
+    ((insert-g seqrem) #f a l)))
+
+(yyy 'b '(a b c))
