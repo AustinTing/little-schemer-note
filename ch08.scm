@@ -23,3 +23,16 @@
        (else (cons (car l) ((rember-f test?) a (cdr l))))))))
 
 ((rember-f equal?) 'a '(c b a))
+
+(define insertL-f
+  (lambda (test?)
+    (lambda (new old l)
+      (cond
+       ((null? l) '())
+       ((test? old (car l)) (cons new l))
+       (else (cons (car l) ((insertL-f test?) new old (cdr l))))))))
+
+((insertL-f equal?) 'L 'b '(a b c d))
+
+
+
