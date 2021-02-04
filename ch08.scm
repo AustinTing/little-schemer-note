@@ -76,3 +76,19 @@
     ((insert-g seqrem) #f a l)))
 
 (yyy 'b '(a b c))
+
+(define atom-to-function
+  (lambda (x)
+    (cond
+     ((eq? x '+) jia)
+     ((eq? x '-) cheng)
+     (else up))))
+
+(operator '(+ 1 2))
+
+(atom-to-function (operator '(+ 1 2)))
+    
+
+    
+
+
