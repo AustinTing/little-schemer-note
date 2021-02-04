@@ -81,13 +81,22 @@
   (lambda (x)
     (cond
      ((eq? x '+) jia)
-     ((eq? x '-) cheng)
+     ((eq? x 'x) cheng)
      (else up))))
 
-(operator '(+ 1 2))
+(eq? 'x (operator '(x 1 2)))
 
 (atom-to-function (operator '(+ 1 2)))
-    
+
+(define value
+  (lambda (nexp)
+    (cond
+     ((atom? nexp) nexp)
+     (else ((atom-to-function (operator nexp))
+	    (value (1st-sub-exp nexp))
+	    (value (2nd-sub-exp nexp)))))))
+      
+(value '(+ (x 2 3) (^ 3 4)))
 
     
 
