@@ -107,3 +107,25 @@
        (else (cons (car lat) ((multirember-f test?) a (cdr lat))))))))
 
 ((multirember-f equal?) 'b '(a b c b b a))
+
+(define eq-c?
+  (lambda (a)
+    (lambda (x)
+      (eq? x a))))
+
+((eq-c? 'b) 'a)
+
+(define eq-c?-b
+  (eq-c? 'b))
+
+(eq-c?-b 'b)
+(eq-c?-b 'a)
+
+(define multiremberT
+  (lambda (test? lat)
+    (cond
+     ((null? lat) '())
+     ((test? (car lat)) (multiremberT test? (cdr lat)))
+     (else (cons (car lat) (multiremberT test? (cdr lat)))))))
+
+(multiremberT eq-c?-b '(a b c b b a))
