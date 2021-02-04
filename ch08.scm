@@ -98,6 +98,12 @@
       
 (value '(+ (x 2 3) (^ 3 4)))
 
-    
+(define multirember-f
+  (lambda (test?)
+    (lambda (a lat)
+      (cond
+       ((null? lat) '())
+       ((test? a (car lat)) ((multirember-f test?) a (cdr lat)))
+       (else (cons (car lat) ((multirember-f test?) a (cdr lat))))))))
 
-
+((multirember-f equal?) 'b '(a b c b b a))
