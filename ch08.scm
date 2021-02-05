@@ -174,3 +174,18 @@
 ;; 			 (a-friend (cons 'a newlat) (cons 'b seen))))
 ;; ...
 ;; ((null? '()) (a-friend (cons 'a '()) (cons 'b '()))) ; #f
+
+(define multiinsertLR
+  (lambda (new oldL oldR lat)
+    (cond
+     ((null? lat) '())
+     ((eq? oldL (car lat)) (cons new
+				 (cons oldL
+				       (multiinsertLR new oldL oldR (cdr lat)))))
+     ((eq? oldR (car lat)) (cons oldR
+				(cons new
+				      (multiinsertLR new oldL oldR (cdr lat)))))
+     (else (cons (car lat)
+		 (multiinsertLR new oldL oldR (cdr lat)))))))
+
+(multiinsertLR 'n 'L 'R '(a b L c d R e f))
