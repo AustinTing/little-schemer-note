@@ -212,3 +212,23 @@
 
 (multiinsertLR&co 'n 'L 'R '(a b L c d R e f) (lambda (newlat numL numR)
 						(cons newlat (cons numL (cons numR '())))))
+
+(define even?
+  (lambda (n)
+    (= (* (quotient n 2) 2) n)))
+
+(even? 7)
+
+(define evens-only*
+  (lambda (l)
+    (cond
+     ((null? l) '())
+     ((atom? (car l)) (cond
+		       ((even? (car l)) (cons (car l)
+					      (evens-only* (cdr l))))
+		       (else (evens-only* (cdr l)))))
+     (else (cons (evens-only* (car l))
+		 (evens-only* (cdr l)))))))
+
+(evens-only* '(1 2 3 4 5))
+(evens-only* '(1 (2 3 (4 5 (6 7))) (8 9)))
