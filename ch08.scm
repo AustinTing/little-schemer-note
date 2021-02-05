@@ -129,3 +129,48 @@
      (else (cons (car lat) (multiremberT test? (cdr lat)))))))
 
 (multiremberT eq-c?-b '(a b c b b a))
+
+(define multirember&co
+  (lambda (a lat col)
+    (cond
+     ((null? lat) (col '() '()))
+     ((eq? a (car lat)) (multirember&co a (cdr lat) (lambda (newlat seen)
+						      (col newlat (cons (car lat) seen)))))
+     (else (multirember&co a (cdr lat) (lambda (newlat seen)
+					 (col (cons (car lat) newlat) seen)))))))
+(define a-friend
+  (lambda (x y)
+    (null? y)))
+
+(multirember&co 'b '() a-friend)
+(multirember&co 'b '(b) a-friend)
+;; (multirember&co 'b '(b) a-friend)
+;; ...
+;; ((eq? 'b 'b) (multirember&co 'b '() (lambda (newlat seen)
+;;				        (a-friend newlat (cons 'b seen)))))
+;; ...
+;; -natural recursion
+;; (multirember&co 'b '() (lambda (newlat seen)
+;;			    (a-friend newlat (cons 'b seen))))
+;; ...
+;; ((null? '()) (a-friend '() (cons 'b '()))) ; #f
+;; ...
+
+(multirember&co 'b '(a b) a-friend)
+;; (multirember&co 'b '(a b) a-friend)
+;; ...
+;; (else (multirember&co 'b '(b) (lambda (newlat seen)
+;; 				(a-friend (cons 'a newlat) seen))))
+;; ...
+;; -natural recursion
+;; (multirember&co 'b '(b) (lambda (newlat seen)
+;; 			  (a-friend (cons 'a newlat) seen)))
+;; ...
+;; ((eq? 'b 'b) (multirember&co 'b '() (lambda (newlat seen)
+;; 				      (a-friend (cons 'a newlat) (cons 'b seen)))))
+;; ...
+;; -natural recursion
+;; (multirember&co 'b '() (lambda (newlat seen)
+;; 			 (a-friend (cons 'a newlat) (cons 'b seen))))
+;; ...
+;; ((null? '()) (a-friend (cons 'a '()) (cons 'b '()))) ; #f
