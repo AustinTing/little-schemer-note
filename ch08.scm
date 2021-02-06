@@ -267,3 +267,105 @@
 (evens-only*&co '(2 3 4 5) cons-result)
 (evens-only*&co '((1 2) 3 4) cons-result)
 (evens-only*&co '(1 (2 3 (4 5 (6 7))) (8 9)) cons-result)
+;; (evens-only*&co '((1 2) 3 4) cons-result)
+;; ... (car l) is (1 2), (cdr l) is (3 4), col is cons-result.
+;; (else (evens-only*&co (1 2) (lambda (car-newlat car-product car-sum)
+;; 				     (evens-only*&co (3 4) (lambda (cdr-newlat cdr-product cdr-sum)
+;; 							       (cons-result (cons car-newlat cdr-newlat)
+;; 									    (cheng car-product cdr-product)
+;; 									    (jia car-sum cdr-sum)))))))
+;; ...
+;; -
+;; (evens-only*&co (1 2) (lambda (car-newlat car-product car-sum)
+;; 			(evens-only*&co (3 4) (lambda (cdr-newlat cdr-product cdr-sum)
+;; 						(cons-result (cons car-newlat cdr-newlat)
+;; 							     (cheng car-product cdr-product)
+;; 							     (jia car-sum cdr-sum))))))
+;; ... (car l) is 1, (cdr l) is (2), col is like above.
+;; (else (evens-only*&co (2) (lambda (newlat product sum)
+;; 			    (col newlat
+;; 				 product
+;; 				 (jia 1 sum)))))
+;; ... replace col
+;; (else (evens-only*&co (2) (lambda (newlat product sum)
+;; 			    (evens-only*&co (3 4) (lambda (cdr-newlat cdr-product cdr-sum)
+;; 						    (cons-result (cons newlat cdr-newlat)
+;; 								 (cheng product cdr-product)
+;; 								 (jia (jia 1 sum) cdr-sum)))))))
+;; ...
+;; -
+;; (evens-only*&co (2) (lambda (newlat product sum)
+;; 			  (evens-only*&co (3 4) (lambda (cdr-newlat cdr-product cdr-sum)
+;; 						  (cons-result (cons newlat cdr-newlat)
+;; 							       (cheng product cdr-product)
+;; 							       (jia (jia 1 sum) cdr-sum))))))
+;; ...(car l) is 2, (cdr l) is (), col is like above.
+;; ((even? 2) (evens-only*&co () (lambda (newlat product sum)
+;; 				(col (cons 2 newlat)
+;; 				     (cheng 2 product)
+;; 				     sum))))
+;; ... replace col
+;; ((even? 2) (evens-only*&co () (lambda (newlat product sum)
+;; 				(evens-only*&co (3 4) (lambda (cdr-newlat cdr-product cdr-sum)
+;; 							 (cons-result (cons (cons 2 newlat) cdr-newlat)
+;; 								      (cheng (cheng 2 product) cdr-product)
+;; 								      (jia (jia 1 sum) cdr-sum)))))))
+;; ...
+;; -
+;; (evens-only*&co () (lambda (newlat product sum)
+;; 		     (evens-only*&co (3 4) (lambda (cdr-newlat cdr-product cdr-sum)
+;; 					     (cons-result (cons (cons 2 newlat) cdr-newlat)
+;; 							  (cheng (cheng 2 product) cdr-product)
+;; 							  (jia (jia 1 sum) cdr-sum))))))
+;; ... l is (), col is like above.
+;; ((null? ()) (col '() 1 0))
+;; ... replace col
+;; ((null? ()) (evens-only*&co (3 4) (lambda (cdr-newlat cdr-product cdr-sum)
+;; 					     (cons-result (cons (cons 2 '()) cdr-newlat)
+;; 							  (cheng (cheng 2 1) cdr-product)
+;; 							  (jia (jia 1 0) cdr-sum)))))
+;; ...
+;; -
+;; (evens-only*&co (3 4) (lambda (cdr-newlat cdr-product cdr-sum)
+;; 					     (cons-result (cons (cons 2 '()) cdr-newlat)
+;; 							  (cheng (cheng 2 1) cdr-product)
+;; 							  (jia (jia 1 0) cdr-sum))))
+;; ...(car l) is 3, (cdr l) is (4). col is like above.
+;; (else (evens-only*&co (4) (lambda (newlat product sum)
+;; 			    (col newlat
+;; 				 product
+;; 				 (jia 3 sum)))))
+;; ... replace col
+;; (else (evens-only*&co (4) (lambda (newlat product sum)
+;; 			    (cons-result (cons (cons 2 '()) newlat)
+;; 					 (cheng (cheng 2 1) product)
+;; 					 (jia (jia 1 0) (jia 3 sum))))))
+;; ...
+;; -
+;; (evens-only*&co (4) (lambda (newlat product sum)
+;; 			    (cons-result (cons (cons 2 '()) newlat)
+;; 					 (cheng (cheng 2 1) product)
+;; 					 (jia (jia 1 0) (jia 3 sum)))))
+;; ...(car l) is 4, (cdr l) is (). col is like above.
+;; ((even? 4) (evens-only*&co () (lambda (newlat product sum)
+;; 				(col (cons 4 newlat)
+;; 				     (cheng 4 product)
+;; 				     sum))))
+;; ... replace col
+;; ((even? 4) (evens-only*&co () (lambda (newlat product sum)
+;; 				(cons-result (cons (cons 2 '()) (cons 4 newlat))
+;; 					     (cheng (cheng 2 1) (cheng 4 product))
+;; 					     (jia (jia 1 0) (jia 3 sum))))))
+;; ...
+;; -
+;; (evens-only*&co () (lambda (newlat product sum)
+;; 				(cons-result (cons (cons 2 '()) (cons 4 newlat))
+;; 					     (cheng (cheng 2 1) (cheng 4 product))
+;; 					     (jia (jia 1 0) (jia 3 sum)))))
+;; ... l is (). col is like above.
+;; ((null? ()) (col '() 1 0))
+;; ... replace col
+;; ((null? ()) (cons-result (cons (cons 2 '()) (cons 4 '()))
+;; 			 (cheng (cheng 2 1) (cheng 4 1))
+;; 			 (jia (jia 1 0) (jia 3 0))))
+;; ...
