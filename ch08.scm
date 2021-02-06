@@ -243,33 +243,27 @@
     (cond
      ((null? l) (col '() 1 0))
      ((atom? (car l)) (cond
-		       ((even? (car l)) (evens-only*&co (cdr l) (lambda atom-even-col (newlat product sum)
-									(col (cons (car l) newlat)
-									     (cheng (car l) product)
-									     sum))))
-		       (else (evens-only*&co (cdr l) (lambda atom-odd-col (newlat product sum)
-							     (col newlat
-								  product
-								  (jia (car l) sum)))))))
-     (else (evens-only*&co (car l) (lambda list-car-col (car-newlat car-product car-sum)
-					   (evens-only*&co (cdr l) (lambda list-cdr-col (cdr-newlat cdr-product cdr-sum)
-									   (col (cons car-newlat cdr-newlat)
-										(cheng (car-product cdr-product))
-										(jia car-sum cdr-sum))))))))))
+		       ((even? (car l)) (evens-only*&co (cdr l) (lambda (newlat product sum)
+								  (col (cons (car l) newlat)
+								       (cheng (car l) product)
+								       sum))))
+		       (else (evens-only*&co (cdr l) (lambda (newlat product sum)
+						       (col newlat
+							    product
+							    (jia (car l) sum)))))))
+     (else (evens-only*&co (car l) (lambda (car-newlat car-product car-sum)
+				     (evens-only*&co (cdr l) (lambda (cdr-newlat cdr-product cdr-sum)
+							       (col (cons car-newlat cdr-newlat)
+								    (cheng car-product cdr-product)
+								    (jia car-sum cdr-sum))))))))))
 
-(evens-only*&co '() (lambda (newlat product sum)
-		      (cons newlat (cons product (cons sum '())))))
-(evens-only*&co '(1) (lambda (newlat product sum)
-		      (cons newlat (cons product (cons sum '())))))
-(evens-only*&co '(2 4) (lambda (newlat product sum)
-			 (cons newlat (cons product (cons sum '())))))
-(evens-only*&co '(2 3 4 5) (lambda (newlat product sum)
-			     (cons newlat (cons product (cons sum '())))))
-(evens-only*&co '((1 2 (3)) 4) (lambda (newlat product sum)
-			       (cons newlat (cons product (cons sum '())))))
-(evens-only*&co '(1 (2 3 (4 5 (6 7))) (8 9)) (lambda (newlat product sum)
-					       (cons newlat
-						     (cons product
-							   (cons sum '())))))
+(define cons-result
+  (lambda (newlat product sum)
+    (cons newlat (cons product (cons sum '())))))
 
-
+(evens-only*&co '() cons-result)
+(evens-only*&co '(1) cons-result)
+(evens-only*&co '(2 4) cons-result)
+(evens-only*&co '(2 3 4 5) cons-result)
+(evens-only*&co '((1 2) 3 4) cons-result)
+(evens-only*&co '(1 (2 3 (4 5 (6 7))) (8 9)) cons-result)
