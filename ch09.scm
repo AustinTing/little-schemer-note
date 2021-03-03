@@ -8,7 +8,18 @@
     (eval x)))
 
 (define keep-looking
-  (lambda (a sorn lat)
+  (lambda (a n-th lat)
     (cond
-     ((member? sorn) (keep-looking a (pick sorn lat) lat))
-     (else (eq? sorn a)))))
+     ((number? n-th) (keep-looking a (pick n-th lat) lat))
+     (else (eq? n-th a)))))
+
+(define looking
+  (lambda (a lat)
+    (keep-looking a (pick 1 lat) lat)))
+
+(looking 'caviar '(6 2 4 caviar 5 7 3))
+(looking 'caviar '(6 2 grits caviar 5 7 3))
+
+
+
+     
