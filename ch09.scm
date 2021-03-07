@@ -37,3 +37,13 @@
 
 (length* '((a b) (c d)))
 
+(define weight*
+  (lambda (pora)
+    (cond
+     ((atom? pora) 1)
+     (else
+      (jia (cheng (weight* (first pora)) 2)
+	   (weight* (second pora)))))))
+
+(weight* '((a b) c))
+
